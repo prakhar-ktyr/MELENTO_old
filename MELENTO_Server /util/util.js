@@ -1,10 +1,11 @@
-var MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
-function connect(collectionName) {
-    var conn = new MongoClient("mongodb://localhost:27017/MELENTO_Mongodb");
-    console.log("Connecting to database");
-    var myDB = conn.db();
-    var coll = myDB.collection(collectionName);
+async function connect(collectionName) {
+    const client = new MongoClient("mongodb://localhost:27017/MELENTO_Mongodb");
+    await client.connect();
+    console.log("Connected to database");
+    const myDB = client.db();
+    const coll = myDB.collection(collectionName);
     return coll;
 }
 
@@ -13,6 +14,7 @@ function renamekey(obj, oldkey, newkey) {
     delete obj[oldkey];
 }
 
-module.exports = { connect,
+module.exports = { 
+    connect,
     renamekey
- };
+};
