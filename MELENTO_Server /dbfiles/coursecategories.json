@@ -1,0 +1,17 @@
+[
+    {
+      "id": "1",
+      "category": "Engineering",
+      "categoryDescription": "Courses related to engineering subjects"
+    },
+    {
+      "id": "2",
+      "category": "Medical",
+      "categoryDescription": "Courses related to medical subjects."
+    },
+    {
+      "id": "3",
+      "category": "Management",
+      "categoryDescription": "Courses related to management subjects"
+    }
+  ]

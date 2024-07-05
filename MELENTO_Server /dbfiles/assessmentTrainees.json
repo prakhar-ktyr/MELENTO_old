@@ -1,0 +1,68 @@
+[
+    {
+      "id": "1",
+      "assessmentId": "5",
+      "traineeId": "2",
+      "quantity": "0"
+    },
+    {
+      "id": "2",
+      "assessmentId": "2",
+      "traineeId": "1",
+      "quantity": "0"
+    },
+    {
+      "id": "3",
+      "assessmentId": "3",
+      "traineeId": "2",
+      "quantity": "0"
+    },
+    {
+      "id": "4",
+      "assessmentId": "4",
+      "traineeId": "2",
+      "quantity": "79"
+    },
+    {
+      "id": "5",
+      "assessmentId": "2",
+      "traineeId": "2",
+      "quantity": "0"
+    },
+    {
+      "id": "6",
+      "assessmentId": "6",
+      "traineeId": "2",
+      "quantity": "0"
+    },
+    {
+      "id": "7",
+      "assessmentId": "4",
+      "traineeId": "7",
+      "quantity": "2"
+    },
+    {
+      "id": "7",
+      "assessmentId": "5",
+      "traineeId": "7",
+      "quantity": "1"
+    },
+    {
+      "id": "9",
+      "assessmentId": "9",
+      "traineeId": "2",
+      "quantity": "2"
+    },
+    {
+      "id": "9",
+      "assessmentId": "8",
+      "traineeId": "2",
+      "quantity": "2"
+    },
+    {
+      "id": "9",
+      "assessmentId": "9",
+      "traineeId": "2",
+      "quantity": "3"
+    }
+  ]
