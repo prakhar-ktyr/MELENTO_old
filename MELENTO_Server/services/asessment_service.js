@@ -1,56 +1,42 @@
-const util = require('../util/util');
+var util = require('../util/util');
 
-async function addObject(collection, object) {
-    return new Promise((resolve, reject) => {
-        collection.insertOne(object, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result.ops[0]);
-            }
-        });
+function addObject(collection, object) {
+    collection.insertOne(object, function (err, result) {
+        if (!err) {
+            console.log("Object added");
+            console.log(result);
+        }
     });
 }
 
-async function findAssessmentsAll() {
-    const coll = await util.connect("assessments");
-    return coll.find().toArray();
+var findAssessmentsAll = function () {
+    console.log("findAssessmentsAll");
+    return new Promise(async (resolve, reject) => {
+        var coll = util.connect("assessments");
+        var items = coll.find().toArray();
+        console.log(items);
+        resolve(items);
+    });
 }
 
-async function findAssessmentById(id) {
-    const coll = await util.connect("assessments");
-    return coll.findOne({ _id: id });
-}
-
-async function addAssessment(assessment) {
-    const coll = await util.connect("assessments");
-    return addObject(coll, assessment);
-}
-
-async function updateAssessment(id, updatedAssessment) {
-    const coll = await util.connect("assessments");
-    const result = await coll.updateOne({ _id: id }, { $set: updatedAssessment });
-    if (result.matchedCount > 0) {
-        return updatedAssessment;
-    } else {
-        throw new Error('Assessment not found');
-    }
-}
-
-async function deleteAssessment(id) {
-    const coll = await util.connect("assessments");
-    const result = await coll.deleteOne({ _id: id });
-    if (result.deletedCount > 0) {
-        return true;
-    } else {
-        throw new Error('Assessment not found');
-    }
+function addAssessment(id, assessmentName, assessmentDescription, assessmentImage, questions, price, facultyId, time, isActive) {
+    return new Promise((resolve, reject) => {
+        var coll = util.connect("assessments");
+        resolve(addObject(coll, {
+            id: id,
+            assessmentName: assessmentName,
+            assessmentDescription: assessmentDescription,
+            assessmentImage: assessmentImage,
+            questions: questions,
+            price: price,
+            facultyId: facultyId,
+            time: time,
+            isActive: isActive
+        }))
+    });
 }
 
 module.exports = {
     findAssessmentsAll,
-    findAssessmentById,
-    addAssessment,
-    updateAssessment,
-    deleteAssessment
+    addAssessment
 };

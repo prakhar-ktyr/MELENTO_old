@@ -1,20 +1,21 @@
+const assessments_controller = require('./controller/assessments_controller');
 const express = require('express');
-const assessmentsController = require('./controller/assessments_controller');
-const cors = require('cors');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors());
 
 const port = 3000;
-
-app.listen(port, () => 
+const cors = require('cors');
+app.use(cors());
+app.use(express.json());
+const server = app.listen(port, () => 
     console.log(`Server running on port ${port}`)
 );
 
-app.get('/assessments', assessmentsController.getAssessments);
-app.get('/assessments/:id', assessmentsController.getAssessmentById);
-app.post('/addAssessment', assessmentsController.addAssessment);
-app.put('/assessments/:id', assessmentsController.updateAssessment);
-app.delete('/assessments/:id', assessmentsController.deleteAssessment);
+app.get('/assessments', (req, res) => {
+    assessments_controller.getAssessments(req, res);
+});
+
+app.post('/addAssessment', (req, res) => {
+    assessments_controller.addAssessment(req, res);
+});
