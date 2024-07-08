@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 
 function connect(collectionName) {
-    var conn = new MongoClient("mongodb://localhost:27017/MELENTO_Mongodb");
+    var conn = new MongoClient("mongodb://localhost:27017/assessments");
     console.log("Connecting to database");
     var myDB = conn.db();
     var coll = myDB.collection(collectionName);
