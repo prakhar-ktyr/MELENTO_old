@@ -1,50 +1,100 @@
-const util = require('../util/util');
+var util = require('../util/util');
 
-async function addObject(collection, object) {
+// Helper function to add an object to the collection
+function addObject(collection, object) {
     return new Promise((resolve, reject) => {
-        collection.insertOne(object, (err, result) => {
+        collection.insertOne(object, function (err, result) {
             if (err) {
                 reject(err);
             } else {
-                resolve(result.ops[0]);
+                console.log("Object added");
+                console.log(result);
+                resolve(result);
             }
         });
     });
 }
 
-async function findAssessmentsAll() {
-    const coll = await util.connect("assessments");
-    return coll.find().toArray();
+// Find all assessments
+var findAssessmentsAll = function () {
+    console.log("findAssessmentsAll");
+    return new Promise(async (resolve, reject) => {
+        var coll = await util.connect("assessments");
+        coll.find().toArray(function (err, items) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log(items);
+                resolve(items);
+            }
+        });
+    });
 }
 
-async function findAssessmentById(id) {
-    const coll = await util.connect("assessments");
-    return coll.findOne({ _id: id });
+// Find assessment by ID
+var findAssessmentById = function (id) {
+    console.log("findAssessmentById");
+    return new Promise(async (resolve, reject) => {
+        var coll = await util.connect("assessments");
+        coll.findOne({ _id: id }, function (err, item) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log(item);
+                resolve(item);
+            }
+        });
+    });
 }
 
-async function addAssessment(assessment) {
-    const coll = await util.connect("assessments");
-    return addObject(coll, assessment);
+// Add a new assessment
+function addAssessment(id, assessmentName, assessmentDescription, assessmentImage, questions, price, facultyId, time, isActive) {
+    return new Promise(async (resolve, reject) => {
+        var coll = await util.connect("assessments");
+        resolve(addObject(coll, {
+            _id: id,
+            assessmentName: assessmentName,
+            assessmentDescription: assessmentDescription,
+            assessmentImage: assessmentImage,
+            questions: questions,
+            price: price,
+            facultyId: facultyId,
+            time: time,
+            isActive: isActive
+        }));
+    });
 }
 
-async function updateAssessment(id, updatedAssessment) {
-    const coll = await util.connect("assessments");
-    const result = await coll.updateOne({ _id: id }, { $set: updatedAssessment });
-    if (result.matchedCount > 0) {
-        return updatedAssessment;
-    } else {
-        throw new Error('Assessment not found');
-    }
+// Update an assessment
+function updateAssessment(id, updatedAssessment) {
+    return new Promise(async (resolve, reject) => {
+        var coll = await util.connect("assessments");
+        coll.updateOne({ _id: id }, { $set: updatedAssessment }, function (err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Assessment updated");
+                console.log(result);
+                resolve(result);
+            }
+        });
+    });
 }
 
-async function deleteAssessment(id) {
-    const coll = await util.connect("assessments");
-    const result = await coll.deleteOne({ _id: id });
-    if (result.deletedCount > 0) {
-        return true;
-    } else {
-        throw new Error('Assessment not found');
-    }
+// Delete an assessment
+function deleteAssessment(id) {
+    return new Promise(async (resolve, reject) => {
+        var coll = await util.connect("assessments");
+        coll.deleteOne({ _id: id }, function (err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Assessment deleted");
+                console.log(result);
+                resolve(result);
+            }
+        });
+    });
 }
 
 module.exports = {
