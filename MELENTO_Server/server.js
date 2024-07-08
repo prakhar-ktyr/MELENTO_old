@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const assessments_controller = require('./controller/assessments_controller');
+const generic_controller = require('./controller/generic_controller');
 
 const app = express();
 const port = 3000;
@@ -14,8 +14,13 @@ const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-app.get('/assessments', assessments_controller.getAssessments);
-app.get('/assessments/:id', assessments_controller.getAssessmentById);
-app.post('/addAssessment', assessments_controller.addAssessment);
-app.put('/assessments/:id', assessments_controller.updateAssessment);
-app.delete('/assessments/:id', assessments_controller.deleteAssessment);
+// Define routes for each collection
+const collections = ['assessments', 'assessmentScore', 'assessmentTrainees', 'attendance', 'cart', 'coursecategories', 'courses', 'reports', 'users'];
+
+collections.forEach(collection => {
+    app.get(`/${collection}`, generic_controller.getDocuments(collection));
+    app.get(`/${collection}/:id`, generic_controller.getDocumentById(collection));
+    app.post(`/${collection}`, generic_controller.addDocument(collection));
+    app.put(`/${collection}/:id`, generic_controller.updateDocument(collection));
+    app.delete(`/${collection}/:id`, generic_controller.deleteDocument(collection));
+});
