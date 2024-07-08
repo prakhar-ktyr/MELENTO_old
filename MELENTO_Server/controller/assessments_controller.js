@@ -13,13 +13,11 @@ function getAssessments(req, res) {
     assessments_service.findAssessmentsAll().then(
         (items) => {
             console.log("Promise fulfilled");
-            console.log(items);
             const objArr = items;
             objArr.forEach((obj) => {
                 util.renamekey(obj, "_id", "id");
             });
             const updatedItems = JSON.stringify(objArr);
-            console.log(updatedItems);
             res.setHeader('Content-Type', 'application/json');
             res.send(updatedItems);
         },
