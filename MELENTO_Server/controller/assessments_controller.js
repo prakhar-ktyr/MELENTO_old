@@ -1,4 +1,4 @@
-const assessments_service = require('../services/assessment_service');
+const assessments_service = require('../services/asessment_service');
 const util = require('../util/util');
 
 module.exports = {
