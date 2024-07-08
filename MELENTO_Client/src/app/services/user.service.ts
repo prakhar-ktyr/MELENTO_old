@@ -62,7 +62,10 @@ export class UserService {
     return this.httpClient.delete<User[]>(this.baseUrl + '/users/' + id, this.httpHeader)
     .pipe(catchError(this.httpError));
   }
-
+  userAuth(user:any){
+    console.log(user) ; 
+    return this.httpClient.post<any>(this.baseUrl + '/login/' , user , this.httpHeader).pipe(catchError(this.httpError)) ; 
+  }
   httpError(error:HttpErrorResponse){
     let msg='';
     if(error.error instanceof ErrorEvent){

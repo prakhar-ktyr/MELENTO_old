@@ -62,6 +62,8 @@ import { LoginModalComponent } from './components/login-modal/login-modal.compon
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatBadgeModule} from '@angular/material/badge';
 import { ReportComponent } from './components/report/report.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { httpInterceptorProviders , HttpRequestInterceptor} from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -126,12 +128,13 @@ import { ReportComponent } from './components/report/report.component';
     MatSlideToggleModule,
     CanvasJSAngularChartsModule,
     MatDialogModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
   providers: [
     provideClientHydration(),
     LocalStorageService,
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    httpInterceptorProviders 
   ],
   bootstrap: [AppComponent]
 })

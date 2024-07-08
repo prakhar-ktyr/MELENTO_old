@@ -145,11 +145,21 @@ export class NavbarComponent implements OnInit {
         this.isLoggedIn = true;
         this.userRole = user.role;
         console.log('Login successful');
+        // this.userService.userAuth(user).subscribe((data) => {
+        //   console.log("Sent user data to server")
+        // })
+        this.userService.userAuth({email : email , password : password}).subscribe((data) => {
+          console.log("Sent user login data to server") ; 
+          console.log(data) ; 
+          this.localStorageService.setItem('token' , data.token) ; 
+        })
         this.router.navigate(['/dashboard']);
       } else {
         console.log('Invalid credentials');
       }
     });
+
+    
   }
 
   logout(): void {

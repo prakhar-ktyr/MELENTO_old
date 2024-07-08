@@ -20,7 +20,7 @@ async function findAll(collectionName) {
         try {
             const coll = await util.connect(collectionName);
             const items = await coll.find().toArray();
-            console.log(items);
+            // console.log(items);
             resolve(items);
         } catch (err) {
             reject(err);
@@ -34,7 +34,7 @@ async function findById(collectionName, id) {
         try {
             const coll = await util.connect(collectionName);
             const item = await coll.findOne({ _id: id });
-            console.log(item);
+            // console.log(item);
             resolve(item);
         } catch (err) {
             reject(err);
@@ -91,10 +91,26 @@ async function deleteDocument(collectionName, id) {
     });
 }
 
+// Find user for authentication
+async function findUserByCreds(collectionName, credentials) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const coll = await util.connect(collectionName);
+            const item = await coll.findOne(credentials);
+            // console.log(item);
+            resolve(item);
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
+
+
 module.exports = {
     findAll,
     findById,
     addDocument,
     updateDocument,
-    deleteDocument
+    deleteDocument,
+    findUserByCreds
 };
