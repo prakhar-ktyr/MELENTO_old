@@ -1,14 +1,6 @@
 const db_service = require('../services/db_service');
 const util = require('../util/util');
 
-module.exports = {
-    getDocuments,
-    getDocumentById,
-    addDocument,
-    updateDocument,
-    deleteDocument
-};
-
 function getDocuments(collectionName) {
     return (req, res) => {
         db_service.findAll(collectionName).then(
@@ -106,3 +98,29 @@ function deleteDocument(collectionName) {
         });
     };
 }
+
+const getUserByCredentials = (collectionName, credentials) => {
+    return new Promise((resolve, reject) => {
+        db_service.findUserByCreds(collectionName, credentials)
+            .then(foundUser => {
+                if (foundUser) {
+                    util.renamekey(foundUser, "_id", "id");
+                    resolve(foundUser);
+                } else {
+                    reject(new Error('Document not found'));
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+};
+
+module.exports = {
+    getDocuments,
+    getDocumentById,
+    addDocument,
+    updateDocument,
+    deleteDocument,
+    getUserByCredentials
+};
