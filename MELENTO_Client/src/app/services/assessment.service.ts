@@ -3,6 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Observable, catchError, of, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,12 @@ export class AssessmentService {
   httpHeader = {
     headers: new HttpHeaders({
       'content-type': 'application/json',
-    }),
+    })
   };
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient , private localStorageService : LocalStorageService) {
+  
+  }
 
   getAssessments(): Observable<Assessment[]> {
     return this.httpClient.get<Assessment[]>(this.baseUrl + "/assessments", this.httpHeader)

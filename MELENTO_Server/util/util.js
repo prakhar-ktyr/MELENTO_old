@@ -6,6 +6,7 @@ async function connect(collectionName) {
     await conn.connect();
     console.log("Connected to database");
     const myDB = conn.db('MELENTO_Mongodb');
+    // const myDB = conn.db('assessments');
     const coll = myDB.collection(collectionName);
     return coll;
 }

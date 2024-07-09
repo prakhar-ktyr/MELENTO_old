@@ -31,19 +31,19 @@ const collections = [
 
 // Middleware to protect routes
 const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-  
+    const token = req.headers['authorization'].split(' ')[1];
+    //  res.send(token)
     if (!token) {
-      return res.staus(401).json({
+      console.log('Invalid bearer token', token)
+      return res.status(401).json({
           error : 'Bearer token invalid'
       });
     }
-  
+    
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.status(403).json({
-          error : 'Token verification failed'
+          error : 'Token did not match , verification failed '
         })
       }
       req.user = decoded ;
@@ -52,16 +52,21 @@ const authenticateToken = (req, res, next) => {
   };
 
 collections.forEach((collection) => {
-  app.get(`/${collection}`, generic_controller.getDocuments(collection));
-  app.get(`/${collection}/:id`,  generic_controller.getDocumentById(collection));
-  app.post(`/${collection}`, generic_controller.addDocument(collection));
-  app.put(`/${collection}/:id`, generic_controller.updateDocument(collection));
-  app.delete(`/${collection}/:id`, generic_controller.deleteDocument(collection)
+  if(collection === 'assessments'){
+    app.get(`/${collection}`,  generic_controller.getDocuments(collection));
+  }
+  else{
+    app.get(`/${collection}`,  authenticateToken, generic_controller.getDocuments(collection));
+  }
+  app.get(`/${collection}/:id`, authenticateToken , generic_controller.getDocumentById(collection));
+  app.post(`/${collection}`, authenticateToken , generic_controller.addDocument(collection));
+  app.put(`/${collection}/:id`, authenticateToken , generic_controller.updateDocument(collection));
+  app.delete(`/${collection}/:id`, authenticateToken , generic_controller.deleteDocument(collection)
   );
 });
 
 
-// Login endpoint
+
 app.post("/login", (req, res) => {
   const userDetails = req.body;
   const email = userDetails.email;
@@ -72,6 +77,7 @@ app.post("/login", (req, res) => {
         
         const token =  jwt.sign(foundUser , process.env.JWT_SECRET, { expiresIn: '24h' });
         res.json({
+            user : foundUser,
             token : token
         })
     })

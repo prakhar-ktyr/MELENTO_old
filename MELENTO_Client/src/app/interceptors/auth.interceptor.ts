@@ -1,88 +1,51 @@
-// import { Injectable } from '@angular/core';
-// import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS, HttpErrorResponse } from '@angular/common/http';
-// import { Observable, throwError } from 'rxjs';
-// import { catchError } from 'rxjs/operators';
-
-// @Injectable()
-// export class JwtInterceptor implements HttpInterceptor 
-// {
-//   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> 
-//   {
-//     let token = localStorage.getItem('token');
-//     if (token) {
-//       request = request.clone({
-//         setHeaders: {
-//           Authorization: `Bearer ${token}`
-//         }
-//       });
-//     }
-//     return next.handle(request);
-//   }
-//  }
-
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { LocalStorageService } from '../services/local-storage.service';
-
-
-// import { StorageService } from '../_services/storage.service';
-// import { EventBusService } from '../_shared/event-bus.service';
-// import { EventData } from '../_shared/event.class';
-
+import { Injectable } from "@angular/core";
+import {
+  HttpEvent,
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HttpErrorResponse,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { LocalStorageService } from "../services/local-storage.service";
 
 @Injectable()
-export class HttpRequestInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
+export class AuthInterceptor implements HttpInterceptor {
+    token = "" ;
+    constructor(private localStorageService : LocalStorageService){
+        this.localStorageService.getItem('token') ; 
+    }
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    
+    let authtoken = this.localStorageService.getItem('token') ;
+    if(!authtoken) authtoken = "" ;
+    this.token = authtoken ; 
+    req = req.clone({
+      setHeaders: {
+        authorization: `Bearer ${this.token}`,
+      },
+    });
 
-
-  constructor(private localStorageService : LocalStorageService) { }
-
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // const token = localStorage.getItem('token') ;
-    // req = req.clone({
-    //   withCredentials: true,
-    // });
-
+    // Log the modified request
+    console.log("Intercepted HTTP call", req);
 
     return next.handle(req).pipe(
-      catchError((error) => {
-        // logout when token is expired
-/*
-        if (
-          error instanceof HttpErrorResponse &&
-          !req.url.includes('auth/signin') &&
-          error.status === 401
-        ) {
-          return this.handle401Error(req, next);
-        }
-*/
-        return throwError(() => error);
+      catchError((error: HttpErrorResponse) => {
+        // Handle errors
+        console.error("Error occurred:", error);
+        return throwError(error);
       })
     );
   }
-
-
-  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-
-
-      // if (this.storageService.isLoggedIn()) {
-      //   this.eventBusService.emit(new EventData('logout', null));
-      // }
-    }
-
-
-    return next.handle(request);
-  }
 }
 
-
-export const httpInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },
-];
-
-
+export const httpInterceptorProvider = {
+  provide: HTTP_INTERCEPTORS,
+  useClass: AuthInterceptor,
+  multi: true,
+};

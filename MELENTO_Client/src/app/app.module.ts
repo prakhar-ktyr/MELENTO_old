@@ -63,7 +63,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatBadgeModule} from '@angular/material/badge';
 import { ReportComponent } from './components/report/report.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { httpInterceptorProviders , HttpRequestInterceptor} from './interceptors/auth.interceptor';
+import { AuthInterceptor, httpInterceptorProvider } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -134,7 +134,7 @@ import { httpInterceptorProviders , HttpRequestInterceptor} from './interceptors
     provideClientHydration(),
     LocalStorageService,
     provideAnimationsAsync(),
-    httpInterceptorProviders 
+    httpInterceptorProvider
   ],
   bootstrap: [AppComponent]
 })
